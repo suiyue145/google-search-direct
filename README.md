@@ -13,9 +13,11 @@
 - **Windows**：双击 `一键安装-Win.bat`（需和 `install-windows.ps1` 放在同一文件夹），选「1) 安装 / 重装」；在文件夹选择窗口按 `Ctrl+L` 粘贴路径并回车。
 - **macOS**：双击 `一键安装-Mac.command`，选「1) 安装 / 重装」；在文件夹选择窗口按 `Shift+Command+G` 粘贴路径并回车。
 
-助手会自动下载 GitHub 最新版、放到固定目录、打开扩展页并复制目录路径。详见 `installer/使用说明.md`。
+助手会自动下载 GitHub 最新版、放进 Chrome 用户数据目录下的专用插件文件夹、打开扩展页并复制目录路径。详见 `installer/使用说明.md`。
 
 > Chrome 137+ 禁止第三方扩展静默安装（`--load-extension` 参数已移除），所以最后一步必须由用户在浏览器里亲自确认，这是浏览器限制，不是脚本缺陷。
+
+> Chrome 没有“放进 `Extensions` 文件夹就自动安装”的机制；脚本只是把文件放到 Chrome 目录下，仍需在扩展页用「加载已解压的扩展程序」确认一次。旧路径插件会自动复制到新目录，移除旧卡片后重新加载即可。
 
 ### 方式二：从 GitHub 源码手动安装
 
@@ -159,9 +161,11 @@ Open the `installer/` folder:
 - **Windows**: double-click `一键安装-Win.bat` (keep `install-windows.ps1` in the same folder) and choose "1) Install". In the folder dialog press `Ctrl+L`, paste the copied path and press Enter.
 - **macOS**: double-click `一键安装-Mac.command` and choose "1) Install". In the folder dialog press `Shift+Command+G`, paste the copied path and press Enter.
 
-The helper downloads the latest release from GitHub, places it in a stable folder, opens the extensions page and copies the folder path. See `installer/使用说明.md`.
+The helper downloads the latest release from GitHub, places it in a dedicated folder under Chrome's user data directory, opens the extensions page and copies the folder path. See `installer/使用说明.md`.
 
 > Chrome 137+ removed `--load-extension` and blocks silent third-party extension installs, so the final confirmation in the browser cannot be automated.
+
+> Chrome has no "drop a folder into `Extensions` to install it" mechanism. The helper only puts the files under Chrome's directory; you still need to confirm with **Load unpacked**. Plugins found at the old path are copied to the new folder automatically — remove the old extension card and reload from the new path.
 
 ### Option 2: install manually from source
 

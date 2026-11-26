@@ -3,10 +3,19 @@ $ProgressPreference = 'SilentlyContinue'
 try { [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 } catch { }
 
 $RepoZip = 'https://github.com/suiyue145/google-search-direct/archive/refs/heads/main.zip'
-$BaseDir = Join-Path $env:LOCALAPPDATA 'Google Search Direct'
+# 优先放进 Chrome 用户数据目录下的专用插件文件夹；Chrome 不存在时才回退到旧路径
+$ChromeUserData = Join-Path $env:LOCALAPPDATA 'Google\Chrome\User Data'
+$LegacyBaseDir = Join-Path $env:LOCALAPPDATA 'Google Search Direct'
+if (Test-Path $ChromeUserData) {
+  $BaseDir = Join-Path $ChromeUserData 'Google Search Direct'
+} else {
+  $BaseDir = $LegacyBaseDir
+}
 $InstallDir = Join-Path $BaseDir 'plugin'
 $BackupDir = Join-Path $BaseDir 'backup'
 $MetaFile = Join-Path $BaseDir 'install-info.txt'
+$LegacyInstallDir = Join-Path $LegacyBaseDir 'plugin'
+$script:MigratedFromLegacy = $false
 $RuntimeFiles = @(
   'manifest.json', 'background.js', 'content.js', 'packs.js',
   'i18n-data.js', 'i18n.js',
@@ -29,6 +38,18 @@ function Warn([string]$Message) {
 function Wait-Key {
   Write-Host ''
   Read-Host '按回车键返回菜单...' | Out-Null
+}
+
+function Migrate-Legacy {
+  if ($script:MigratedFromLegacy) { return }
+  if ((Test-Path (Join-Path $LegacyInstallDir 'manifest.json')) -and
+      -not (Test-Path (Join-Path $InstallDir 'manifest.json')) -and
+      ($LegacyInstallDir -ne $InstallDir)) {
+    New-Item -ItemType Directory -Force -Path $BaseDir | Out-Null
+    Copy-Item -Path $LegacyInstallDir -Destination $InstallDir -Recurse -Force
+    $script:MigratedFromLegacy = $true
+    Info ('已将旧目录的插件复制到 Chrome 插件目录：' + $InstallDir)
+  }
 }
 
 function Get-Version([string]$Dir) {
@@ -172,6 +193,9 @@ function Print-FinalSteps([string]$Mode) {
     Info '  2. 点「加载已解压的扩展程序」'
     Info '  3. 在弹出的窗口按 Ctrl+L，粘贴（Ctrl+V）刚才复制的路径，回车'
     Info '  4. 点「选择文件夹」完成安装'
+    if ($script:MigratedFromLegacy) {
+      Info '  补充：检测到旧目录，已复制到上面的 Chrome 插件目录；请在扩展页移除旧卡片后，用新路径重新加载一次。'
+    }
   }
   Info ''
   Info '说明：Chrome 出于安全考虑不允许第三方扩展静默安装，最后这一步无法由脚本代替。'
@@ -241,6 +265,8 @@ function Do-ShowPath {
   }
   Wait-Key
 }
+
+Migrate-Legacy
 
 while ($true) {
   Clear-Host

@@ -1,14 +1,23 @@
 #!/bin/bash
 # Google 搜索直达 - macOS 一键安装助手
-# 作用：下载最新插件源码 -> 放到固定目录 -> 打开 Chrome 扩展页 -> 复制目录路径
+# 作用：下载最新插件源码 -> 放进 Chrome 用户数据目录下的专用插件文件夹 -> 打开扩展页 -> 复制目录路径
 # 说明：Chrome 137+ 禁止静默安装第三方扩展，最后一步需要你在弹窗里粘贴路径并确认（约 2 次点击）
 set -uo pipefail
 
 REPO_ZIP="https://github.com/suiyue145/google-search-direct/archive/refs/heads/main.zip"
-BASE_DIR="$HOME/Library/Application Support/Google Search Direct"
+# 优先放进 Chrome 用户数据目录下的专用插件文件夹；Chrome 不存在时才回退到旧路径
+CHROME_USER_DATA="$HOME/Library/Application Support/Google/Chrome"
+LEGACY_BASE_DIR="$HOME/Library/Application Support/Google Search Direct"
+if [ -d "$CHROME_USER_DATA" ]; then
+  BASE_DIR="$CHROME_USER_DATA/Google Search Direct"
+else
+  BASE_DIR="$LEGACY_BASE_DIR"
+fi
 INSTALL_DIR="$BASE_DIR/plugin"
 BACKUP_DIR="$BASE_DIR/backup"
 META_FILE="$BASE_DIR/install-info.txt"
+LEGACY_INSTALL_DIR="$LEGACY_BASE_DIR/plugin"
+MIGRATED_FROM_LEGACY=0
 
 # 只安装运行必需文件，避免把 README、安装器一起塞进扩展目录
 RUNTIME_FILES=(
@@ -24,6 +33,16 @@ warn() { printf '%s\n' "注意: $1"; }
 pause() {
   info ""
   read -r -p "按回车键返回菜单..." _unused
+}
+
+migrate_legacy() {
+  if [ "$MIGRATED_FROM_LEGACY" -eq 1 ]; then return; fi
+  if [ -f "$LEGACY_INSTALL_DIR/manifest.json" ] && [ ! -f "$INSTALL_DIR/manifest.json" ] && [ "$LEGACY_INSTALL_DIR" != "$INSTALL_DIR" ]; then
+    mkdir -p "$BASE_DIR"
+    cp -R "$LEGACY_INSTALL_DIR" "$INSTALL_DIR"
+    MIGRATED_FROM_LEGACY=1
+    info "已将旧目录的插件复制到 Chrome 插件目录：$INSTALL_DIR"
+  fi
 }
 
 check_tools() {
@@ -127,6 +146,9 @@ print_final_steps() {
     info "  2. 点「加载已解压的扩展程序」"
     info "  3. 在弹出的选择窗口按 Shift+Command+G，粘贴（Command+V）刚才复制的路径，回车"
     info "  4. 点「选择」/「打开」完成安装"
+    if [ "$MIGRATED_FROM_LEGACY" -eq 1 ]; then
+      info "  补充：检测到旧目录，已复制到上面的 Chrome 插件目录；请在扩展页移除旧卡片后，用新路径重新加载一次。"
+    fi
   fi
   info ""
   info "说明：Chrome 出于安全考虑不允许第三方扩展静默安装，最后这一步无法由脚本代替。"
@@ -189,6 +211,8 @@ do_show_path() {
   fi
   pause
 }
+
+migrate_legacy
 
 while true; do
   clear 2>/dev/null || true
