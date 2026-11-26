@@ -246,7 +246,19 @@ document.getElementById('reset-packs').addEventListener('click', () => {
 localeSelect.addEventListener('change', async () => {
   const pref = localeSelect.value;
   try {
-    await chrome.runtime.sendMessage({ type: 'set-locale', locale: pref });
+    await new Promise((resolve, reject) => {
+      chrome.runtime.sendMessage({ type: 'set-locale', locale: pref }, (resp) => {
+        if (chrome.runtime.lastError) {
+          reject(new Error(chrome.runtime.lastError.message));
+          return;
+        }
+        if (resp && resp.ok === false) {
+          reject(new Error(resp.error || 'set-locale failed'));
+          return;
+        }
+        resolve(resp);
+      });
+    });
     await load();
     const label = pref === 'auto'
       ? t('localeAutoName', '跟随系统语言')
@@ -344,7 +356,9 @@ async function save() {
   });
   packs = cleaned;
   render();
-  chrome.runtime.sendMessage({ type: 'config-changed' }, () => {});
+  chrome.runtime.sendMessage({ type: 'config-changed' }, () => {
+    void chrome.runtime.lastError;
+  });
   const total = cleaned.reduce((n, p) => n + p.domains.length, 0);
   flash(t('savedSummary', '已保存 $1 个网站包、共 $2 个网站（按包内顺序生效）', [cleaned.length, total]));
 }

@@ -122,7 +122,9 @@
     if (!hit) return; // 所有网站都没有结果，保留 Google 页面
 
     if (pending.openMode === 'newtab') {
-      chrome.runtime.sendMessage({ type: 'open-tab', url: hit.url }, () => {});
+      chrome.runtime.sendMessage({ type: 'open-tab', url: hit.url }, () => {
+        void chrome.runtime.lastError;
+      });
     } else {
       location.assign(hit.url);
     }

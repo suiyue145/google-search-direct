@@ -12,6 +12,7 @@ function getConfig() {
   return new Promise((resolve) => {
     try {
       chrome.runtime.sendMessage({ type: 'get-config' }, (config) => {
+        if (chrome.runtime.lastError) return resolve(null);
         if (config && Array.isArray(config.packs)) return resolve(config);
         resolve(null);
       });
@@ -66,7 +67,9 @@ function render() {
 async function switchTo(id, name) {
   activeId = id;
   await chrome.storage.sync.set({ activePackId: id });
-  chrome.runtime.sendMessage({ type: 'config-changed' }, () => {});
+  chrome.runtime.sendMessage({ type: 'config-changed' }, () => {
+    void chrome.runtime.lastError;
+  });
   render();
   statusEl.textContent = t('switched', '已切换到「$1」', [name]);
   setTimeout(() => { statusEl.textContent = ''; }, 2000);

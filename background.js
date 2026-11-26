@@ -166,9 +166,13 @@ async function applyUI(config) {
 
 function broadcastConfigChanged() {
   try {
-    chrome.runtime.sendMessage({ type: 'config-changed' }, () => {});
+    // 没有打开的 popup/options 时这里会收到 lastError，必须读取掉，
+    // 否则 Chrome 会报 "Unchecked runtime.lastError"。
+    chrome.runtime.sendMessage({ type: 'config-changed' }, () => {
+      void chrome.runtime.lastError;
+    });
   } catch (e) {
-    /* 没有打开的 popup，忽略 */
+    /* 忽略 */
   }
 }
 
@@ -239,13 +243,17 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (!msg) return;
   if (msg.type === 'open-tab' && msg.url) {
     chrome.tabs.create({ url: msg.url, active: true });
+    sendResponse({ ok: true });
   } else if (msg.type === 'config-changed') {
     ensureConfig().then(applyUI);
+    sendResponse({ ok: true });
   } else if (msg.type === 'get-config') {
-    ensureConfig().then(sendResponse);
+    ensureConfig().then(sendResponse).catch(() => sendResponse(null));
     return true; // 异步响应
   } else if (msg.type === 'set-locale') {
-    applyLocale(msg.locale).then((config) => sendResponse({ ok: true, config }));
+    applyLocale(msg.locale)
+      .then((config) => sendResponse({ ok: true, config }))
+      .catch((err) => sendResponse({ ok: false, error: String(err && err.message || err) }));
     return true; // 异步响应
   }
 });
