@@ -3,7 +3,7 @@
     "message": "Google Search Direct / Google 搜索直达"
   },
   "extDesc": {
-    "message": "Right-click text to Google Search and auto-open the first result from your site packs. 8 built-in packs, bilingual UI, locale-aware defaults, shortcuts. 纯前端、无追踪。"
+    "message": "Right-click text to Google Search and auto-open the first result from your site packs. 9 built-in packs, bilingual UI, locale-aware defaults, shortcuts. 纯前端、无追踪。"
   },
   "actionTitle": {
     "message": "Google Search Direct - click to switch site pack"
@@ -69,7 +69,7 @@
     "message": "Right-click selected text to open results by pack priority"
   },
   "popupHintKeys": {
-    "message": "Press 1-8 to switch, 0 to cycle"
+    "message": "Press 1-9 to switch, 0 to cycle"
   },
   "keyGlobal": {
     "message": "Alt+Shift+$1"
@@ -141,10 +141,10 @@
     "message": "1. Each pack is a priority-ordered domain list: the first site with a matching result is opened; if none match, the next one is tried."
   },
   "help2": {
-    "message": "2. Click \"Activate\" on a card to choose the current pack. Click the toolbar icon to switch quickly; inside the popup, press 1-8 to jump to a pack or 0 to cycle."
+    "message": "2. Click \"Activate\" on a card to choose the current pack. Click the toolbar icon to switch quickly; inside the popup, press 1-9 to jump to a pack or 0 to cycle."
   },
   "help3": {
-    "message": "3. Chrome allows only 4 preset shortcuts: Alt+Shift+1/2/3 and Alt+Shift+0. To bind global keys for packs 4-8, or if a preset key is taken, open \"Shortcuts\" and assign your own."
+    "message": "3. Chrome allows only 4 preset shortcuts: Alt+Shift+1/2/3 and Alt+Shift+0. To bind global keys for packs 4-9, or if a preset key is taken, open \"Shortcuts\" and assign your own."
   },
   "help4": {
     "message": "4. You can omit https:// and www. in domains. Use legitimate sites only; do not add pirated resources."
@@ -295,5 +295,11 @@
   },
   "langSwitched": {
     "message": "Interface language switched"
+  },
+  "packAI": {
+    "message": "AI & Tools"
+  },
+  "cmdSwitch9": {
+    "message": "Switch to site pack 9 (assign in shortcut settings)"
   }
 }

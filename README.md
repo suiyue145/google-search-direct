@@ -2,7 +2,7 @@
 
 选中任意文字 → 右键 → 自动 Google 搜索 → 按**当前网站包**的优先顺序打开结果链接。
 
-内置 8 套按爱好分类的网站包（通用、小说、影视、购物、学术、开发、新闻、音乐）。界面支持**简体中文 / English**，默认自动跟随系统语言，也可在设置页固定；新安装的**默认网站列表**按语言/国家自动选择（中文用户用国内常用站，英文用户用国际常用站，英/加/澳另有本地微调）。发布名称与描述采用中英混合。纯前端、无服务器、无追踪，Manifest V3。
+内置 9 套按爱好分类的网站包（通用、小说、影视、购物、学术、开发、新闻、音乐、AI）。界面支持**简体中文 / English**，默认自动跟随系统语言，也可在设置页固定；新安装的**默认网站列表**按语言/国家自动选择（中文用户用国内常用站，英文用户用国际常用站，英/加/澳另有本地微调）。发布名称与描述采用中英混合。纯前端、无服务器、无追踪，Manifest V3。
 
 ## 安装（从 GitHub 源码）
 
@@ -10,7 +10,7 @@
 2. 打开 Chrome，地址栏输入 `chrome://extensions`
 3. 右上角打开「开发者模式」
 4. 点击「加载已解压的扩展程序」，选择**解压后的文件夹**（里面应能看到 `manifest.json`）
-5. 安装后点工具栏图标即可看到 8 个网站包；默认包由系统语言决定（中文→通用工具，英文→General）
+5. 安装后点工具栏图标即可看到 9 个网站包；默认包由系统语言决定（中文→通用工具，英文→General）
 
 > 注意：Chrome 会记住这个文件夹的位置，不能删除或移动它。开发模式下每次打开浏览器会显示"请停用开发者模式"的提示，属于正常现象，不影响使用。
 
@@ -52,10 +52,10 @@ Chrome 限制每个扩展最多只能预置 **4 个**默认快捷键，所以采
 |---|---|
 | `Alt+Shift+1` / `2` / `3` | 全局直接切到第 1/2/3 个网站包 |
 | `Alt+Shift+0` | 全局循环切换到下一个网站包 |
-| 点图标后按 `1`~`8` | 在弹出面板里直接切到第 1~8 个包（覆盖全部） |
+| 点图标后按 `1`~`9` | 在弹出面板里直接切到第 1~9 个包（覆盖全部） |
 | 点图标后按 `0` | 在弹出面板里循环切换 |
 
-第 4~8 个包也可以分配成全局键：打开 `chrome://extensions/shortcuts`，找到对应语言的「切换到网站包 4~8」自行绑定。已有的 4 个键被系统占用时也可以在那里改。工具栏图标上会显示当前包的序号角标（1~8），鼠标悬停可看到包名。
+第 4~9 个包也可以分配成全局键：打开 `chrome://extensions/shortcuts`，找到对应语言的「切换到网站包 4~9」自行绑定。已有的 4 个键被系统占用时也可以在那里改。工具栏图标上会显示当前包的序号角标（1~9），鼠标悬停可看到包名。
 
 ## 内置网站包
 
@@ -71,6 +71,7 @@ Chrome 限制每个扩展最多只能预置 **4 个**默认快捷键，所以采
 | 6 | 💻 开发技术 | GitHub、Stack Overflow、MDN、掘金、CSDN、npm、React、Vue |
 | 7 | 📰 新闻资讯 | 新华网、人民网、澎湃、中新网、央视新闻、虎嗅 |
 | 8 | 🎵 音乐听书 | 网易云音乐、QQ音乐、酷狗、酷我、喜马拉雅、B站 |
+| 9 | 🤖 AI 人工智能 | 量子位、机器之心、AI 工具集、通义、豆包、文心一言、智谱清言、Hugging Face、arXiv |
 
 英文预设（节选）：
 
@@ -84,6 +85,7 @@ Chrome 限制每个扩展最多只能预置 **4 个**默认快捷键，所以采
 | 6 | 💻 Development | GitHub, Stack Overflow, MDN, npm, React, Vue, Python docs |
 | 7 | 📰 News | BBC, Reuters, AP, The Guardian, NYT, WSJ |
 | 8 | 🎵 Music & Audio | Spotify, Apple Music, YouTube, SoundCloud, Pandora, Audible |
+| 9 | 🤖 AI & Tools | OpenAI, Anthropic, Hugging Face, Google AI, DeepMind, Papers with Code, arXiv, TechCrunch, The Verge |
 
 **合规说明**：只收录官方/正版站点。影视包里的商业平台通常设有免费专区或试看内容，是否免费以各站页面标识为准；插件本身不托管、不提供任何内容，只是帮你打开 Google 搜索里已有的结果。请勿自行添加盗版小说/影视站——那既不合法，也容易导致商店下架。
 
@@ -119,7 +121,7 @@ Chrome 限制每个扩展最多只能预置 **4 个**默认快捷键，所以采
 打开设置页，在最上方「界面语言」选择「跟随系统语言（自动）」或固定为简体中文 / English。浏览器扩展无法直接读取操作系统语言，「跟随系统」实际读取浏览器界面语言；其他语言回退英文。网站列表可在下方单独指定，不依赖界面语言。
 
 **快捷键没反应？**
-Chrome 每个扩展最多只允许 4 个预置默认键，本插件已把 `Alt+Shift+1/2/3/0` 预置好；其余「切换到网站包 4~8」默认未绑定，需去 `chrome://extensions/shortcuts` 自行设置。若预置键被占用，在那里改键即可；最快捷的兜底是点图标后在弹窗里按数字键 1~8。
+Chrome 每个扩展最多只允许 4 个预置默认键，本插件已把 `Alt+Shift+1/2/3/0` 预置好；其余「切换到网站包 4~9」默认未绑定，需去 `chrome://extensions/shortcuts` 自行设置。若预置键被占用，在那里改键即可；最快捷的兜底是点图标后在弹窗里按数字键 1~9。
 
 **想改成其他搜索引擎？**
 把 `background.js` 里 `searchUrl` 的 `https://www.google.com/search?q=` 换成目标搜索引擎地址，并在 `manifest.json` 的 `content_scripts.matches` 加上对应域名。
@@ -133,7 +135,7 @@ Chrome 每个扩展最多只允许 4 个预置默认键，本插件已把 `Alt+S
 
 Select any text, right-click, search it on Google, and let the extension open the first matching result from your **active site pack**.
 
-8 built-in packs (General, Books, Movies & TV, Shopping, Research, Development, News, Music & Audio). The interface supports **Simplified Chinese / English**, follows your system/browser language by default and can be pinned in options. New installs also get a locale-appropriate site list (Chinese sites for `zh-*`, international sites for `en-*`, with GB/CA/AU tweaks). Store listing uses a bilingual mixed-language title and description. No server, no tracking, Manifest V3.
+9 built-in packs (General, Books, Movies & TV, Shopping, Research, Development, News, Music & Audio, AI & Tools). The interface supports **Simplified Chinese / English**, follows your system/browser language by default and can be pinned in options. New installs also get a locale-appropriate site list (Chinese sites for `zh-*`, international sites for `en-*`, with GB/CA/AU tweaks). Store listing uses a bilingual mixed-language title and description. No server, no tracking, Manifest V3.
 
 ## Install from source
 
@@ -166,14 +168,14 @@ Chrome allows at most **4 preset shortcuts** per extension, so this extension us
 |---|---|
 | `Alt+Shift+1` / `2` / `3` | Switch to pack 1/2/3 globally |
 | `Alt+Shift+0` | Cycle to the next pack globally |
-| Click icon, press `1`-`8` | Switch to any pack in the popup |
+| Click icon, press `1`-`9` | Switch to any pack in the popup |
 | Click icon, press `0` | Cycle packs in the popup |
 
-Packs 4-8 can be assigned global keys at `chrome://extensions/shortcuts`. The toolbar badge shows the active pack number.
+Packs 4-9 can be assigned global keys at `chrome://extensions/shortcuts`. The toolbar badge shows the active pack number.
 
 ## Built-in packs (English preset)
 
-General: Wikipedia, Reddit, Quora, Britannica, GitHub. Books: Goodreads, Project Gutenberg, Internet Archive, Open Library, Amazon, Bookshop.org. Movies & TV: IMDb, YouTube, Rotten Tomatoes, TMDB, Metacritic, Netflix, Disney+, Hulu, Prime Video. Shopping: Amazon, eBay, Walmart, Best Buy, Target, PriceGrabber, Google Shopping. Research: arXiv, PubMed, Semantic Scholar, Google Scholar, JSTOR, DOI, Springer, ScienceDirect. Development: GitHub, Stack Overflow, MDN, npm, React, Vue, Python docs, Medium. News: BBC, Reuters, AP, The Guardian, NYT, WSJ, Al Jazeera. Music & Audio: Spotify, Apple Music, YouTube, SoundCloud, Pandora, Audible.
+General: Wikipedia, Reddit, Quora, Britannica, GitHub. Books: Goodreads, Project Gutenberg, Internet Archive, Open Library, Amazon, Bookshop.org. Movies & TV: IMDb, YouTube, Rotten Tomatoes, TMDB, Metacritic, Netflix, Disney+, Hulu, Prime Video. Shopping: Amazon, eBay, Walmart, Best Buy, Target, PriceGrabber, Google Shopping. Research: arXiv, PubMed, Semantic Scholar, Google Scholar, JSTOR, DOI, Springer, ScienceDirect. Development: GitHub, Stack Overflow, MDN, npm, React, Vue, Python docs, Medium. News: BBC, Reuters, AP, The Guardian, NYT, WSJ, Al Jazeera. Music & Audio: Spotify, Apple Music, YouTube, SoundCloud, Pandora, Audible. AI & Tools: OpenAI, Anthropic, Hugging Face, Google AI, DeepMind, Papers with Code, arXiv, TechCrunch, The Verge, Product Hunt.
 
 Only legitimate/official sites are bundled. The extension hosts no content; it simply opens links that already exist in your Google results. Please do not add pirated sites.
 

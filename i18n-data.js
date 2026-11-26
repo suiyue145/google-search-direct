@@ -6,7 +6,7 @@ globalThis.I18N_DATA = {
       "message": "Google Search Direct / Google 搜索直达"
     },
     "extDesc": {
-      "message": "Right-click text to Google Search and auto-open the first result from your site packs. 8 built-in packs, bilingual UI, locale-aware defaults, shortcuts. 纯前端、无追踪。"
+      "message": "Right-click text to Google Search and auto-open the first result from your site packs. 9 built-in packs, bilingual UI, locale-aware defaults, shortcuts. 纯前端、无追踪。"
     },
     "actionTitle": {
       "message": "Google Search Direct - click to switch site pack"
@@ -72,7 +72,7 @@ globalThis.I18N_DATA = {
       "message": "Right-click selected text to open results by pack priority"
     },
     "popupHintKeys": {
-      "message": "Press 1-8 to switch, 0 to cycle"
+      "message": "Press 1-9 to switch, 0 to cycle"
     },
     "keyGlobal": {
       "message": "Alt+Shift+$1"
@@ -144,10 +144,10 @@ globalThis.I18N_DATA = {
       "message": "1. Each pack is a priority-ordered domain list: the first site with a matching result is opened; if none match, the next one is tried."
     },
     "help2": {
-      "message": "2. Click \"Activate\" on a card to choose the current pack. Click the toolbar icon to switch quickly; inside the popup, press 1-8 to jump to a pack or 0 to cycle."
+      "message": "2. Click \"Activate\" on a card to choose the current pack. Click the toolbar icon to switch quickly; inside the popup, press 1-9 to jump to a pack or 0 to cycle."
     },
     "help3": {
-      "message": "3. Chrome allows only 4 preset shortcuts: Alt+Shift+1/2/3 and Alt+Shift+0. To bind global keys for packs 4-8, or if a preset key is taken, open \"Shortcuts\" and assign your own."
+      "message": "3. Chrome allows only 4 preset shortcuts: Alt+Shift+1/2/3 and Alt+Shift+0. To bind global keys for packs 4-9, or if a preset key is taken, open \"Shortcuts\" and assign your own."
     },
     "help4": {
       "message": "4. You can omit https:// and www. in domains. Use legitimate sites only; do not add pirated resources."
@@ -298,6 +298,12 @@ globalThis.I18N_DATA = {
     },
     "langSwitched": {
       "message": "Interface language switched"
+    },
+    "packAI": {
+      "message": "AI & Tools"
+    },
+    "cmdSwitch9": {
+      "message": "Switch to site pack 9 (assign in shortcut settings)"
     }
   },
   "zh_CN": {
@@ -305,7 +311,7 @@ globalThis.I18N_DATA = {
       "message": "Google 搜索直达 / Google Search Direct"
     },
     "extDesc": {
-      "message": "右键选中文字 → Google 搜索 → 按网站包优先顺序自动打开结果。8 套内置网站包，界面中英双语、默认列表随语言/国家自动选择，支持快捷键秒切。Pure frontend, no tracking."
+      "message": "右键选中文字 → Google 搜索 → 按网站包优先顺序自动打开结果。9 套内置网站包，界面中英双语、默认列表随语言/国家自动选择，支持快捷键秒切。Pure frontend, no tracking."
     },
     "actionTitle": {
       "message": "Google 搜索直达 - 点击切换网站包"
@@ -371,7 +377,7 @@ globalThis.I18N_DATA = {
       "message": "右键选中文字 → 按当前网站包的优先顺序打开结果"
     },
     "popupHintKeys": {
-      "message": "弹窗内按 1~8 切换，按 0 循环"
+      "message": "弹窗内按 1~9 切换，按 0 循环"
     },
     "keyGlobal": {
       "message": "Alt+⇧+$1"
@@ -443,10 +449,10 @@ globalThis.I18N_DATA = {
       "message": "1. 每个包是一个按优先顺序排列的域名列表：排在前面的网站有结果就打开它，没有才试下一个。"
     },
     "help2": {
-      "message": "2. 点卡片上的「启用」决定当前生效的包；点工具栏图标可快速切换，弹窗内按数字键 1~8 切到对应包，按 0 循环切换。"
+      "message": "2. 点卡片上的「启用」决定当前生效的包；点工具栏图标可快速切换，弹窗内按数字键 1~9 切到对应包，按 0 循环切换。"
     },
     "help3": {
-      "message": "3. Chrome 只允许 4 个预置快捷键：Alt+Shift+1/2/3 与 Alt+Shift+0。想给第 4~8 个包设全局键，或预置键被系统占用，打开「设置快捷键」自行绑定。"
+      "message": "3. Chrome 只允许 4 个预置快捷键：Alt+Shift+1/2/3 与 Alt+Shift+0。想给第 4~9 个包设全局键，或预置键被系统占用，打开「设置快捷键」自行绑定。"
     },
     "help4": {
       "message": "4. 域名不用写 https:// 和 www.，写了也能识别；只收录合法站点，请勿添加盗版资源站。"
@@ -597,6 +603,12 @@ globalThis.I18N_DATA = {
     },
     "langSwitched": {
       "message": "界面语言已切换"
+    },
+    "packAI": {
+      "message": "AI 人工智能"
+    },
+    "cmdSwitch9": {
+      "message": "切换到网站包 9（需在快捷键设置页自行分配）"
     }
   }
 };

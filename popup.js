@@ -88,8 +88,8 @@ async function load() {
   render();
 }
 
-// 弹窗内数字键覆盖全部包：1~8 直接切换，0 循环切换
-// （Chrome 限制 manifest 最多 4 个预置键位，所以 4~8 用这种方式兜底）
+// 弹窗内数字键覆盖全部包：1~9 直接切换，0 循环切换
+// （Chrome 限制 manifest 最多 4 个预置键位，所以 4~9 用这种方式兜底）
 document.addEventListener('keydown', (event) => {
   if (event.altKey || event.ctrlKey || event.metaKey || !packs.length) return;
   if (/^[1-9]$/.test(event.key)) {

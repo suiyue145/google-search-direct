@@ -33,6 +33,7 @@ function isBuiltinPack(pack) {
 }
 
 function nameKeyFor(id) {
+  if (id === 'ai') return 'packAI'; // AI 为缩写，需保持全大写
   const s = String(id || '');
   return 'pack' + s.charAt(0).toUpperCase() + s.slice(1);
 }
@@ -94,6 +95,16 @@ async function ensureConfig() {
       builtin
     };
   });
+
+  // 升级补齐：老用户已有配置缺少新增的内置包（如 AI）时追加到末尾，
+  // 不改变已有包的顺序和当前生效包。
+  const presentIds = new Set(packs.map((p) => p.id));
+  for (const fresh of createBuiltinPacks(variant, uiLanguage())) {
+    if (!presentIds.has(fresh.id)) {
+      packs.push(fresh);
+      presentIds.add(fresh.id);
+    }
+  }
 
   if (!activePackId || !packs.some((p) => p.id === activePackId)) {
     activePackId = packs[0].id;

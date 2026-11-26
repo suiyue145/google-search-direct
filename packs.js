@@ -120,6 +120,23 @@ const ZH_PACKS = [
       'ximalaya.com',
       'bilibili.com'
     ]
+  },
+  {
+    id: 'ai',
+    nameKey: 'packAI',
+    icon: '🤖',
+    domains: [
+      'qbitai.com',          // 量子位
+      'jiqizhixin.com',      // 机器之心
+      'aibase.com',          // AI 工具集
+      '36kr.com',
+      'tongyi.aliyun.com',   // 通义千问
+      'doubao.com',          // 豆包
+      'yiyan.baidu.com',     // 文心一言
+      'chatglm.cn',          // 智谱清言
+      'huggingface.co',
+      'arxiv.org'
+    ]
   }
 ];
 
@@ -229,6 +246,23 @@ const EN_PACKS = [
       'pandora.com',
       'audible.com'
     ]
+  },
+  {
+    id: 'ai',
+    nameKey: 'packAI',
+    icon: '🤖',
+    domains: [
+      'openai.com',
+      'anthropic.com',
+      'huggingface.co',
+      'ai.google',
+      'deepmind.google',
+      'paperswithcode.com',
+      'arxiv.org',
+      'techcrunch.com',
+      'theverge.com',
+      'producthunt.com'
+    ]
   }
 ];
 
@@ -248,7 +282,7 @@ const EN_REGION_TWEAKS = {
   }
 };
 
-const BUILTIN_IDS = ['general', 'novel', 'movie', 'shopping', 'academic', 'dev', 'news', 'music'];
+const BUILTIN_IDS = ['general', 'novel', 'movie', 'shopping', 'academic', 'dev', 'news', 'music', 'ai'];
 
 function uiLanguage() {
   // 返回当前生效语言（受扩展内语言偏好控制），供页面 lang 属性与地区判断使用

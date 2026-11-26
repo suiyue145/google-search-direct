@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_extName__",
-  "version": "1.3.0",
+  "version": "1.5.0",
   "default_locale": "en",
   "description": "__MSG_extDesc__",
   "permissions": ["contextMenus", "storage"],
@@ -40,6 +40,7 @@
     "switch-pack-5": { "description": "__MSG_cmdSwitch5__" },
     "switch-pack-6": { "description": "__MSG_cmdSwitch6__" },
     "switch-pack-7": { "description": "__MSG_cmdSwitch7__" },
-    "switch-pack-8": { "description": "__MSG_cmdSwitch8__" }
+    "switch-pack-8": { "description": "__MSG_cmdSwitch8__" },
+    "switch-pack-9": { "description": "__MSG_cmdSwitch9__" }
   }
 }
