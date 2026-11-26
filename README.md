@@ -6,9 +6,14 @@
 
 ## 安装
 
-### 方式一：一键安装助手（macOS，推荐）
+### 方式一：一键安装助手（Windows / macOS，推荐）
 
-进入仓库 `installer/` 目录，双击 `一键安装-Mac.command`，选「1) 安装 / 重装」。脚本会自动下载 GitHub 最新版、放到固定目录、打开扩展页并复制目录路径；你只需在「加载已解压的扩展程序」弹窗里按 `Shift+Command+G` 粘贴路径并确认。详见 `installer/使用说明.md`。
+进入仓库 `installer/` 目录：
+
+- **Windows**：双击 `一键安装-Win.bat`（需和 `install-windows.ps1` 放在同一文件夹），选「1) 安装 / 重装」；在文件夹选择窗口按 `Ctrl+L` 粘贴路径并回车。
+- **macOS**：双击 `一键安装-Mac.command`，选「1) 安装 / 重装」；在文件夹选择窗口按 `Shift+Command+G` 粘贴路径并回车。
+
+助手会自动下载 GitHub 最新版、放到固定目录、打开扩展页并复制目录路径。详见 `installer/使用说明.md`。
 
 > Chrome 137+ 禁止第三方扩展静默安装（`--load-extension` 参数已移除），所以最后一步必须由用户在浏览器里亲自确认，这是浏览器限制，不是脚本缺陷。
 
@@ -147,9 +152,14 @@ Select any text, right-click, search it on Google, and let the extension open th
 
 ## Install
 
-### Option 1: one-click installer (macOS, recommended)
+### Option 1: one-click installer (Windows / macOS, recommended)
 
-Open the `installer/` folder and double-click `一键安装-Mac.command`, then choose "1) Install". It downloads the latest release from GitHub, places it in a stable folder, opens the extensions page and copies the folder path. You only need to paste the path in the "Load unpacked" dialog (`Shift+Command+G`, then `Command+V`). See `installer/使用说明.md`.
+Open the `installer/` folder:
+
+- **Windows**: double-click `一键安装-Win.bat` (keep `install-windows.ps1` in the same folder) and choose "1) Install". In the folder dialog press `Ctrl+L`, paste the copied path and press Enter.
+- **macOS**: double-click `一键安装-Mac.command` and choose "1) Install". In the folder dialog press `Shift+Command+G`, paste the copied path and press Enter.
+
+The helper downloads the latest release from GitHub, places it in a stable folder, opens the extensions page and copies the folder path. See `installer/使用说明.md`.
 
 > Chrome 137+ removed `--load-extension` and blocks silent third-party extension installs, so the final confirmation in the browser cannot be automated.
 

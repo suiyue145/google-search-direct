@@ -28,7 +28,7 @@ pause() {
 
 check_tools() {
   local missing=0
-  for tool in curl unzip; do
+  for tool in curl ditto; do
     if ! command -v "$tool" >/dev/null 2>&1; then
       warn "缺少命令 $tool，请先安装后重试"
       missing=1
@@ -52,7 +52,8 @@ download_source() {
     return 1
   fi
   info "正在解压..."
-  if ! unzip -q "$work/plugin.zip" -d "$work"; then
+  # ditto 是 macOS 自带工具，能正确处理仓库里 installer/使用说明.md 的中文文件名
+  if ! ditto -x -k "$work/plugin.zip" "$work"; then
     warn "解压失败，安装包可能已损坏"
     return 1
   fi
