@@ -43,7 +43,10 @@ function render() {
 
     const key = document.createElement('span');
     key.className = 'key';
-    key.textContent = i < 8 ? 'Alt+⇧+' + (i + 1) : '—';
+    key.textContent = i < 3 ? 'Alt+⇧+' + (i + 1) : '键 ' + (i + 1);
+    key.title = i < 3
+      ? '全局快捷键：Alt+Shift+' + (i + 1)
+      : '在此弹窗中按数字键 ' + (i + 1) + ' 切换；也可在 chrome://extensions/shortcuts 自行分配全局键';
 
     btn.append(icon, name, key);
     btn.addEventListener('click', () => switchTo(pack.id, pack.name));
@@ -70,6 +73,24 @@ async function load() {
   activeId = config.activePackId || (packs[0] && packs[0].id) || '';
   render();
 }
+
+// 弹窗内数字键覆盖全部包：1~8 直接切换，0 循环切换
+// （Chrome 限制 manifest 最多 4 个预置键位，所以 4~8 用这种方式兜底）
+document.addEventListener('keydown', (event) => {
+  if (event.altKey || event.ctrlKey || event.metaKey || !packs.length) return;
+  if (/^[1-9]$/.test(event.key)) {
+    const index = Number(event.key) - 1;
+    if (packs[index]) {
+      event.preventDefault();
+      switchTo(packs[index].id, packs[index].name);
+    }
+  } else if (event.key === '0') {
+    event.preventDefault();
+    const current = packs.findIndex((p) => p.id === activeId);
+    const next = packs[(current + 1) % packs.length];
+    if (next) switchTo(next.id, next.name);
+  }
+});
 
 document.getElementById('settings').addEventListener('click', () => {
   chrome.runtime.openOptionsPage();

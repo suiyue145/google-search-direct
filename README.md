@@ -36,12 +36,16 @@ git clone https://github.com/suiyue145/google-search-direct.git
 
 ## 快捷键
 
-| 快捷键 | 作用 |
-|---|---|
-| `Alt+Shift+1` ~ `Alt+Shift+8` | 直接切到第 1~8 个网站包 |
-| `Alt+Shift+0` | 循环切换到下一个网站包 |
+Chrome 限制每个扩展最多只能预置 **4 个**默认快捷键，所以采用"全局 4 键 + 弹窗全键"的方案：
 
-**如果快捷键被系统或浏览器占用**：打开 `chrome://extensions/shortcuts`，找到本插件自行改键。工具栏图标上会显示当前包的序号角标（1~8），鼠标悬停可看到包名。
+| 操作 | 作用 |
+|---|---|
+| `Alt+Shift+1` / `2` / `3` | 全局直接切到第 1/2/3 个网站包 |
+| `Alt+Shift+0` | 全局循环切换到下一个网站包 |
+| 点图标后按 `1`~`8` | 在弹出面板里直接切到第 1~8 个包（覆盖全部） |
+| 点图标后按 `0` | 在弹出面板里循环切换 |
+
+第 4~8 个包也可以分配成全局键：打开 `chrome://extensions/shortcuts`，找到「切换到网站包 4~8」自行绑定。已有的 4 个键被系统占用时也可以在那里改。工具栏图标上会显示当前包的序号角标（1~8），鼠标悬停可看到包名。
 
 ## 内置网站包
 
@@ -86,7 +90,7 @@ git clone https://github.com/suiyue145/google-search-direct.git
 - Google 调整了结果页 DOM 结构——改 `content.js` 里的 `findFirstMatch` 选择器即可
 
 **快捷键没反应？**
-去 `chrome://extensions/shortcuts` 检查是否被占用或改为 "Inactive"，重新设一个即可。
+Chrome 每个扩展最多只允许 4 个预置默认键，本插件已把 `Alt+Shift+1/2/3/0` 预置好；其余「切换到网站包 4~8」默认未绑定，需去 `chrome://extensions/shortcuts` 自行设置。若预置键被占用，在那里改键即可；最快捷的兜底是点图标后在弹窗里按数字键 1~8。
 
 **想改成其他搜索引擎？**
 把 `background.js` 里 `searchUrl` 的 `https://www.google.com/search?q=` 换成目标搜索引擎地址，并在 `manifest.json` 的 `content_scripts.matches` 加上对应域名。

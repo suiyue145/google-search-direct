@@ -34,11 +34,11 @@
     "switch-pack-1": { "suggested_key": { "default": "Alt+Shift+1" }, "description": "切换到网站包 1" },
     "switch-pack-2": { "suggested_key": { "default": "Alt+Shift+2" }, "description": "切换到网站包 2" },
     "switch-pack-3": { "suggested_key": { "default": "Alt+Shift+3" }, "description": "切换到网站包 3" },
-    "switch-pack-4": { "suggested_key": { "default": "Alt+Shift+4" }, "description": "切换到网站包 4" },
-    "switch-pack-5": { "suggested_key": { "default": "Alt+Shift+5" }, "description": "切换到网站包 5" },
-    "switch-pack-6": { "suggested_key": { "default": "Alt+Shift+6" }, "description": "切换到网站包 6" },
-    "switch-pack-7": { "suggested_key": { "default": "Alt+Shift+7" }, "description": "切换到网站包 7" },
-    "switch-pack-8": { "suggested_key": { "default": "Alt+Shift+8" }, "description": "切换到网站包 8" },
-    "cycle-pack": { "suggested_key": { "default": "Alt+Shift+0" }, "description": "循环切换到下一个网站包" }
+    "cycle-pack": { "suggested_key": { "default": "Alt+Shift+0" }, "description": "循环切换到下一个网站包" },
+    "switch-pack-4": { "description": "切换到网站包 4（需在快捷键设置页自行分配）" },
+    "switch-pack-5": { "description": "切换到网站包 5（需在快捷键设置页自行分配）" },
+    "switch-pack-6": { "description": "切换到网站包 6（需在快捷键设置页自行分配）" },
+    "switch-pack-7": { "description": "切换到网站包 7（需在快捷键设置页自行分配）" },
+    "switch-pack-8": { "description": "切换到网站包 8（需在快捷键设置页自行分配）" }
   }
 }
