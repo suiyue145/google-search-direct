@@ -49,32 +49,39 @@
     }
   }
 
-  function findMatch(domain) {
+  // 按域名列表的优先顺序查找：收集每个域名在结果页中的第一个匹配链接，
+  // 然后按列表顺序返回第一个有结果的——列表靠前的网站优先。
+  function findFirstMatch(domains) {
     const scoped = document.querySelectorAll(
       '#search a[href], div.g a[href], [data-hveid] a[href]'
     );
     const anchors = scoped.length ? scoped : document.querySelectorAll('a[href]');
-    const seen = new Set();
+    const hits = new Map(); // domain -> 第一个匹配到的链接
 
     for (const a of anchors) {
       const u = extractUrlFromAnchor(a);
       if (!u) continue;
       const host = u.hostname.replace(/^www\./i, '').toLowerCase();
       if (!host || isGoogleHost(host)) continue;
-      if (host === domain || host.endsWith('.' + domain)) {
-        if (seen.has(u.href)) continue;
-        seen.add(u.href);
-        return u.href;
+      for (const d of domains) {
+        if (host === d || host.endsWith('.' + d)) {
+          if (!hits.has(d)) hits.set(d, u.href);
+          break; // 一个链接只归到第一个匹配的域名
+        }
       }
+    }
+
+    for (const d of domains) {
+      if (hits.has(d)) return { domain: d, url: hits.get(d) };
     }
     return null;
   }
 
-  function waitForMatch(domain, timeoutMs) {
+  function waitForFirstMatch(domains, timeoutMs) {
     return new Promise((resolve) => {
       const start = Date.now();
       const tick = () => {
-        const hit = findMatch(domain);
+        const hit = findFirstMatch(domains);
         if (hit) return resolve(hit);
         if (Date.now() - start >= timeoutMs) return resolve(null);
         setTimeout(tick, POLL_MS);
@@ -106,16 +113,18 @@
       /* ignore */
     }
 
-    const domain = normalizeDomain(pending.targetDomain);
-    if (!domain) return;
+    // 兼容旧版 pending 里只有单个域名的情况
+    const raw = pending.targetDomains || (pending.targetDomain ? [pending.targetDomain] : []);
+    const domains = raw.map(normalizeDomain).filter(Boolean);
+    if (!domains.length) return;
 
-    const link = await waitForMatch(domain, MAX_WAIT_MS);
-    if (!link) return; // 这次搜索没有该网站的结果，保留 Google 页面
+    const hit = await waitForFirstMatch(domains, MAX_WAIT_MS);
+    if (!hit) return; // 所有网站都没有结果，保留 Google 页面
 
     if (pending.openMode === 'newtab') {
-      chrome.runtime.sendMessage({ type: 'open-tab', url: link }, () => {});
+      chrome.runtime.sendMessage({ type: 'open-tab', url: hit.url }, () => {});
     } else {
-      location.assign(link);
+      location.assign(hit.url);
     }
   }
 

@@ -12,6 +12,7 @@
     --muted: #646a73;
     --line: #dee0e3;
     --primary: #2563eb;
+    --danger: #d54941;
   }
   * { box-sizing: border-box; }
   body {
@@ -21,11 +22,11 @@
     color: var(--text);
     font: 14px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
   }
-  .wrap { max-width: 560px; margin: 0 auto; }
+  .wrap { max-width: 600px; margin: 0 auto; }
   h1 { font-size: 22px; margin: 0 0 4px; }
   .sub { color: var(--muted); margin: 0 0 28px; }
   label { display: block; font-weight: 600; margin: 20px 0 8px; }
-  input, select {
+  select {
     width: 100%;
     padding: 9px 12px;
     border: 1px solid var(--line);
@@ -34,8 +35,62 @@
     color: var(--text);
     font: inherit;
   }
-  input:focus, select:focus { outline: 2px solid rgba(37, 99, 235, .25); border-color: var(--primary); }
-  .presets { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
+  select:focus { outline: 2px solid rgba(37, 99, 235, .25); border-color: var(--primary); }
+
+  .domain-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .domain-row .rank {
+    flex: 0 0 26px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+  .domain-row input {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 9px 12px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--text);
+    font: inherit;
+  }
+  .domain-row input:focus { outline: 2px solid rgba(37, 99, 235, .25); border-color: var(--primary); }
+  .domain-row button {
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--muted);
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+  }
+  .domain-row button:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); }
+  .domain-row button:disabled { opacity: .35; cursor: default; }
+  .domain-row button.del:hover { border-color: var(--danger); color: var(--danger); }
+
+  .ghost-btn {
+    margin-top: 4px;
+    padding: 7px 12px;
+    border: 1px dashed var(--line);
+    background: #fff;
+    color: var(--primary);
+    border-radius: 6px;
+    cursor: pointer;
+    font: inherit;
+  }
+  .ghost-btn:hover { border-color: var(--primary); }
+
+  .presets { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
   .presets button {
     border: 1px solid var(--line);
     background: var(--panel);
@@ -46,6 +101,7 @@
     font-size: 12px;
   }
   .presets button:hover { border-color: var(--primary); color: var(--primary); }
+
   #save {
     margin-top: 24px;
     width: 100%;
@@ -76,10 +132,11 @@
 <body>
 <div class="wrap">
   <h1>Google 搜索直达</h1>
-  <p class="sub">选中文字 → 右键 → Google 搜索 → 自动打开指定网站的结果</p>
+  <p class="sub">选中文字 → 右键 → Google 搜索 → 按优先顺序自动打开网站结果</p>
 
-  <label for="domain">默认网站域名</label>
-  <input id="domain" type="text" placeholder="例如 zhihu.com、github.com、wikipedia.org" autocomplete="off">
+  <label>默认网站（按优先顺序）</label>
+  <div id="domain-list"></div>
+  <button type="button" class="ghost-btn" id="add-domain">+ 添加网站</button>
   <div class="presets" id="presets"></div>
 
   <label for="mode">打开方式</label>
@@ -93,10 +150,11 @@
 
   <div class="help">
     <p><strong>使用说明</strong></p>
-    <p>1. 填写域名（不用写 <code>https://</code> 和 <code>www.</code>，写了也能识别）。</p>
-    <p>2. 在任意网页选中一段文字，右键选择「Google 搜索并自动打开默认网站」。</p>
-    <p>3. 插件会打开 Google 搜索，并在结果里找到第一个属于该网站的链接自动打开。</p>
-    <p>4. 如果这次搜索没有该网站的结果，就只保留 Google 页面，不会乱跳。</p>
+    <p>1. 按优先顺序填写域名，用 ↑ ↓ 调整顺序——排在前面的网站会优先被打开。</p>
+    <p>2. 域名不用写 <code>https://</code> 和 <code>www.</code>，写了也能识别。</p>
+    <p>3. 选中文字后右键 →「Google 搜索并自动打开默认网站」。</p>
+    <p>4. 插件会检查 Google 结果：第一个网站有结果就打开它；没有就依次试第二个、第三个……全部没有则保留 Google 页面。</p>
+    <p>5. 同一网站取搜索结果里排名最靠前的那条链接。</p>
   </div>
 </div>
 <script src="options.js"></script>

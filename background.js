@@ -2,7 +2,7 @@
 
 const MENU_ID = 'google-search-open-default';
 const DEFAULTS = {
-  targetDomain: '',
+  targetDomains: [], // 按优先顺序排列的网站域名列表
   openMode: 'newtab' // 'newtab' | 'navigate'
 };
 
@@ -20,7 +20,12 @@ function createContextMenu() {
 chrome.runtime.onInstalled.addListener(() => {
   createContextMenu();
   chrome.storage.sync.get(DEFAULTS).then((s) => {
-    if (!s.targetDomain) chrome.runtime.openOptionsPage();
+    // 兼容旧版：把单个域名迁移成列表
+    if (!s.targetDomains && s.targetDomain) {
+      chrome.storage.sync.set({ targetDomains: [s.targetDomain] });
+      return;
+    }
+    if (!s.targetDomains || !s.targetDomains.length) chrome.runtime.openOptionsPage();
   });
 });
 chrome.runtime.onStartup.addListener(createContextMenu);
@@ -33,6 +38,16 @@ chrome.contextMenus.onClicked.addListener(async (info) => {
   if (!text) return;
 
   const settings = await chrome.storage.sync.get(DEFAULTS);
+  // 兼容旧配置：没有列表时回退到旧的单个域名
+  let domains = settings.targetDomains;
+  if (!Array.isArray(domains)) {
+    domains = settings.targetDomain ? [settings.targetDomain] : [];
+  }
+  if (!domains.length) {
+    chrome.runtime.openOptionsPage();
+    return;
+  }
+
   const token = Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8);
 
   // 先写 pending，再开标签页，保证内容脚本运行时能读到
@@ -40,7 +55,7 @@ chrome.contextMenus.onClicked.addListener(async (info) => {
     pending: {
       token,
       query: text,
-      targetDomain: settings.targetDomain,
+      targetDomains: domains,
       openMode: settings.openMode,
       ts: Date.now()
     }
@@ -54,9 +69,6 @@ chrome.contextMenus.onClicked.addListener(async (info) => {
     encodeURIComponent(token);
 
   await chrome.tabs.create({ url: searchUrl, active: true });
-
-  // 没设置默认网站时，顺手打开设置页
-  if (!settings.targetDomain) chrome.runtime.openOptionsPage();
 });
 
 // 内容脚本没有 tabs 权限，需要新标签打开时由后台代劳

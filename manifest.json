@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Google 搜索直达",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "右键选中文字 → Google 搜索 → 自动打开指定默认网站的结果链接",
   "permissions": ["contextMenus", "storage"],
   "host_permissions": [
