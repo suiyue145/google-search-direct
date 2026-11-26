@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="zh-CN">
+<html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>切换网站包</title>
+<title data-i18n="popupHeading">Google 搜索直达</title>
 <style>
   :root {
     --bg: #ffffff;
@@ -78,17 +78,18 @@
 </head>
 <body>
 <header>
-  <h1>Google 搜索直达</h1>
-  <div class="current" id="current">加载中…</div>
-  <div class="hint">右键选中文字 → 按当前网站包的优先顺序打开结果</div>
-  <div class="hint">弹窗内按 1~8 切换，按 0 循环</div>
+  <h1 data-i18n="popupHeading">Google 搜索直达</h1>
+  <div class="current" id="current" data-i18n="loading">加载中…</div>
+  <div class="hint" data-i18n="popupHintRight">右键选中文字 → 按当前网站包的优先顺序打开结果</div>
+  <div class="hint" data-i18n="popupHintKeys">弹窗内按 1~8 切换，按 0 循环</div>
 </header>
 <div id="list"></div>
 <div id="status"></div>
 <footer>
-  <button type="button" id="shortcuts">快捷键设置</button>
-  <button type="button" id="settings">管理网站包</button>
+  <button type="button" id="shortcuts" data-i18n="btnShortcuts">快捷键设置</button>
+  <button type="button" id="settings" data-i18n="btnSettings">管理网站包</button>
 </footer>
+<script src="packs.js"></script>
 <script src="popup.js"></script>
 </body>
 </html>

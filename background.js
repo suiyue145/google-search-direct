@@ -3,7 +3,7 @@
 importScripts('packs.js');
 
 const MENU_ID = 'google-search-open-default';
-const BUILTIN = globalThis.BUILTIN_PACKS || [];
+const BUILTIN_IDS_SET = new Set(globalThis.BUILTIN_IDS || []);
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
@@ -28,17 +28,38 @@ function cleanDomains(list) {
   return out;
 }
 
-// 读取配置，并在首次运行时迁移旧版的单域名/单列表配置。
+function isBuiltinPack(pack) {
+  return !!(pack && (pack.builtin || BUILTIN_IDS_SET.has(String(pack.id))));
+}
+
+function nameKeyFor(id) {
+  const s = String(id || '');
+  return 'pack' + s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+function normalizeLocalePref(value) {
+  return value === 'zh_CN' || value === 'en' ? value : 'auto';
+}
+
+function effectiveVariant(pref) {
+  return pref === 'auto' ? detectVariant() : pref;
+}
+
+// 读取配置，并在首次运行时按系统语言（或用户指定的预设）初始化网站包；
+// 同时迁移旧版的单域名/单列表配置。
 async function ensureConfig() {
   const s = await chrome.storage.sync.get([
-    'packs', 'activePackId', 'openMode', 'targetDomains', 'targetDomain'
+    'packs', 'activePackId', 'openMode', 'targetDomains', 'targetDomain', 'locale'
   ]);
 
-  let packs = Array.isArray(s.packs) && s.packs.length ? clone(s.packs) : clone(BUILTIN);
-  if (!packs.length) packs = clone(BUILTIN);
+  const localePref = normalizeLocalePref(s.locale);
+  const variant = effectiveVariant(localePref);
+  const isFirstRun = !Array.isArray(s.packs);
+
+  let packs = isFirstRun ? createBuiltinPacks(variant, uiLanguage()) : clone(s.packs);
+  if (!packs.length) packs = createBuiltinPacks(variant, uiLanguage());
 
   let activePackId = s.activePackId;
-  const isFirstRun = !Array.isArray(s.packs);
   if (isFirstRun) {
     // v1.0 的 targetDomain / v1.1 的 targetDomains 迁移成「我的网站」包
     const legacy = cleanDomains(
@@ -47,31 +68,42 @@ async function ensureConfig() {
         : (s.targetDomain ? [s.targetDomain] : [])
     );
     if (legacy.length) {
-      packs.unshift({ id: 'custom', name: '我的网站', icon: '⭐', domains: legacy, builtin: false });
+      packs.unshift({
+        id: 'custom',
+        name: message('customPack', '我的网站'),
+        icon: '⭐',
+        domains: legacy,
+        builtin: false
+      });
       activePackId = 'custom';
     }
   }
 
-  // 清洗每个包的域名，防止手工改坏配置
-  packs = packs.map((p) => ({
-    id: String(p.id || ('pack-' + Math.random().toString(36).slice(2, 8))),
-    name: String(p.name || '未命名'),
-    icon: String(p.icon || '🔗'),
-    domains: cleanDomains(p.domains),
-    builtin: !!p.builtin
-  }));
+  // 清洗每个包的域名，防止手工改坏配置；内置包按 id 识别，兼容 v1.2 之前未标记 builtin 的数据
+  packs = packs.map((p) => {
+    const builtin = isBuiltinPack(p);
+    return {
+      id: String(p.id || ('pack-' + Math.random().toString(36).slice(2, 8))),
+      name: String(p.name || message(builtin ? nameKeyFor(p.id) : 'unnamedPack', '未命名')),
+      icon: String(p.icon || '🔗'),
+      domains: cleanDomains(p.domains),
+      builtin
+    };
+  });
 
   if (!activePackId || !packs.some((p) => p.id === activePackId)) {
     activePackId = packs[0].id;
   }
 
   const config = {
+    locale: localePref,
     packs,
     activePackId,
     openMode: s.openMode === 'navigate' ? 'navigate' : 'newtab'
   };
 
   await chrome.storage.sync.set({
+    locale: config.locale,
     packs: config.packs,
     activePackId: config.activePackId,
     openMode: config.openMode,
@@ -85,6 +117,26 @@ function activePack(config) {
   return config.packs.find((p) => p.id === config.activePackId) || config.packs[0];
 }
 
+// 切换默认网站列表：替换内置包，保留用户自建包
+async function applyLocale(pref) {
+  const localePref = normalizeLocalePref(pref);
+  const stored = await chrome.storage.sync.get(['packs']);
+  const customPacks = (Array.isArray(stored.packs) ? stored.packs : [])
+    .filter((p) => !isBuiltinPack(p))
+    .map(clone);
+  const builtin = createBuiltinPacks(effectiveVariant(localePref), uiLanguage());
+  const packs = builtin.concat(customPacks);
+  await chrome.storage.sync.set({
+    locale: localePref,
+    packs,
+    activePackId: packs[0] ? packs[0].id : ''
+  });
+  const updated = await ensureConfig();
+  await applyUI(updated);
+  broadcastConfigChanged();
+  return updated;
+}
+
 // 串行化菜单重建，避免 onInstalled / onStartup / 快捷键同时触发时互相清掉
 let menuChain = Promise.resolve();
 function createContextMenu(title) {
@@ -92,7 +144,7 @@ function createContextMenu(title) {
     await new Promise((resolve) => chrome.contextMenus.removeAll(resolve));
     chrome.contextMenus.create({
       id: MENU_ID,
-      title: title || 'Google 搜索并自动打开网站结果',
+      title: title || message('contextMenuFallback', 'Google 搜索并自动打开网站结果'),
       contexts: ['selection']
     });
   });
@@ -102,11 +154,13 @@ function createContextMenu(title) {
 async function applyUI(config) {
   const pack = activePack(config);
   const index = config.packs.findIndex((p) => p.id === pack.id);
-  await createContextMenu('Google 搜索并打开「' + pack.name + '」结果');
+  const menuTitle = message('contextMenu', 'Google 搜索并打开「$1」结果', [pack.name]);
+  await createContextMenu(menuTitle);
   chrome.action.setBadgeText({ text: index < 9 ? String(index + 1) : '•' });
   chrome.action.setBadgeBackgroundColor({ color: '#2563eb' });
   chrome.action.setTitle({
-    title: 'Google 搜索直达 · 当前：' + pack.icon + ' ' + pack.name + '（点击切换）'
+    title: message('extName', 'Google 搜索直达') + ' · ' +
+      message('currentPack', '当前：$1', [(pack.icon || '🔗') + ' ' + pack.name])
   });
 }
 
@@ -189,6 +243,9 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     ensureConfig().then(applyUI);
   } else if (msg.type === 'get-config') {
     ensureConfig().then(sendResponse);
+    return true; // 异步响应
+  } else if (msg.type === 'set-locale') {
+    applyLocale(msg.locale).then((config) => sendResponse({ ok: true, config }));
     return true; // 异步响应
   }
 });

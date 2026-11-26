@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="zh-CN">
+<html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Google 搜索直达 - 网站包管理</title>
+<title data-i18n="optTitle">Google 搜索直达 - 网站包管理</title>
 <style>
   :root {
     --bg: #ffffff;
@@ -83,6 +83,7 @@
   }
   #save:hover { background: #1d4ed8; }
   #status { min-height: 22px; margin: 10px 0 0; color: #16803c; }
+  .hint-text { color: var(--muted); font-size: 12px; margin: 6px 0 0; }
   .help {
     margin-top: 28px; padding: 14px 16px; background: var(--panel);
     border-radius: 6px; color: var(--muted); font-size: 13px;
@@ -94,41 +95,49 @@
 </head>
 <body>
 <div class="wrap">
-  <h1>Google 搜索直达 · 网站包管理</h1>
-  <p class="sub">为不同爱好配置不同的网站优先列表，点工具栏图标或按快捷键秒切</p>
+  <h1 data-i18n="optTitle">Google 搜索直达 · 网站包管理</h1>
+  <p class="sub" data-i18n="optSubtitle">为不同爱好配置不同的网站优先列表，点工具栏图标或按快捷键秒切</p>
 
-  <h2>网站包</h2>
+  <h2 data-i18n="sectionLocale">默认网站列表</h2>
+  <select id="locale">
+    <option value="auto" data-i18n="presetAuto">跟随系统语言（推荐）</option>
+    <option value="zh_CN" data-i18n="presetZh">中文网站</option>
+    <option value="en" data-i18n="presetEn">英文网站</option>
+  </select>
+  <p class="hint-text" data-i18n="presetHint">新安装时按系统语言自动选择；也可手动指定。</p>
+
+  <h2 data-i18n="sectionPacks">网站包</h2>
   <div id="packs"></div>
   <div class="actions">
-    <button type="button" class="btn" id="add-pack">+ 新建网站包</button>
-    <button type="button" class="btn" id="reset-packs">恢复内置预设</button>
-    <button type="button" class="btn" id="open-shortcuts">设置快捷键</button>
+    <button type="button" class="btn" id="add-pack" data-i18n="btnAddPack">+ 新建网站包</button>
+    <button type="button" class="btn" id="reset-packs" data-i18n="btnResetPacks">恢复内置预设</button>
+    <button type="button" class="btn" id="open-shortcuts" data-i18n="btnShortcuts">设置快捷键</button>
   </div>
 
-  <h2>打开方式</h2>
+  <h2 data-i18n="sectionMode">打开方式</h2>
   <select id="mode">
-    <option value="newtab">新标签页打开（推荐，保留 Google 结果）</option>
-    <option value="navigate">在当前标签页跳转</option>
+    <option value="newtab" data-i18n="modeNewTab">新标签页打开（推荐，保留 Google 结果）</option>
+    <option value="navigate" data-i18n="modeNavigate">在当前标签页跳转</option>
   </select>
 
-  <h2>导入 / 导出配置（可发给别人共用）</h2>
-  <textarea id="config-json" spellcheck="false" placeholder="点击「导出」生成配置，或粘贴别人的配置后点「导入」"></textarea>
+  <h2 data-i18n="sectionConfig">导入 / 导出配置（可发给别人共用）</h2>
+  <textarea id="config-json" spellcheck="false" data-i18n-placeholder="configPlaceholder" placeholder="点击「导出」生成配置，或粘贴别人的配置后点「导入」"></textarea>
   <div class="row">
-    <button type="button" class="btn" id="export">导出到文本框</button>
-    <button type="button" class="btn" id="copy">复制配置</button>
-    <button type="button" class="btn" id="import">导入文本框配置</button>
+    <button type="button" class="btn" id="export" data-i18n="btnExport">导出到文本框</button>
+    <button type="button" class="btn" id="copy" data-i18n="btnCopy">复制配置</button>
+    <button type="button" class="btn" id="import" data-i18n="btnImport">导入文本框配置</button>
   </div>
 
-  <button id="save">保存设置</button>
+  <button id="save" data-i18n="btnSave">保存设置</button>
   <p id="status"></p>
 
   <div class="help">
-    <p><strong>使用说明</strong></p>
-    <p>1. 每个包是一个按优先顺序排列的域名列表：排在前面的网站有结果就打开它，没有才试下一个。</p>
-    <p>2. 点卡片上的「启用」决定当前生效的包；点工具栏图标可快速切换，弹窗内按数字键 <code>1~8</code> 切到对应包，按 <code>0</code> 循环切换。</p>
-    <p>3. Chrome 只允许 4 个预置快捷键：<code>Alt+Shift+1/2/3</code> 与 <code>Alt+Shift+0</code>。想给第 4~8 个包设全局键，或预置键被系统占用，打开「设置快捷键」自行绑定。</p>
-    <p>4. 域名不用写 <code>https://</code> 和 <code>www.</code>，写了也能识别；只收录合法站点，请勿添加盗版资源站。</p>
-    <p>5. 选中文字后右键 →「Google 搜索并打开「包名」结果」即可使用。</p>
+    <p><strong data-i18n="helpTitle">使用说明</strong></p>
+    <p data-i18n="help1"></p>
+    <p data-i18n="help2"></p>
+    <p data-i18n="help3"></p>
+    <p data-i18n="help4"></p>
+    <p data-i18n="help5"></p>
   </div>
 </div>
 <script src="packs.js"></script>

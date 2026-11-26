@@ -1,5 +1,6 @@
 'use strict';
 
+const t = (key, fallback, args) => message(key, fallback, args);
 const listEl = document.getElementById('list');
 const currentEl = document.getElementById('current');
 const statusEl = document.getElementById('status');
@@ -20,11 +21,19 @@ function getConfig() {
   });
 }
 
+function applyStaticI18n() {
+  document.documentElement.lang = uiLanguage();
+  document.title = t('popupHeading', 'Google 搜索直达');
+  document.querySelectorAll('[data-i18n]').forEach((el) => {
+    el.textContent = t(el.getAttribute('data-i18n'), el.textContent);
+  });
+}
+
 function render() {
   const active = packs.find((p) => p.id === activeId) || packs[0];
   currentEl.textContent = active
-    ? '当前：' + (active.icon || '🔗') + ' ' + active.name
-    : '当前：未设置';
+    ? t('currentPack', '当前：$1', [(active.icon || '🔗') + ' ' + active.name])
+    : t('noPack', '当前：未设置');
 
   listEl.innerHTML = '';
   packs.forEach((pack, i) => {
@@ -43,10 +52,10 @@ function render() {
 
     const key = document.createElement('span');
     key.className = 'key';
-    key.textContent = i < 3 ? 'Alt+⇧+' + (i + 1) : '键 ' + (i + 1);
+    key.textContent = i < 3 ? t('keyGlobal', 'Alt+Shift+$1', [i + 1]) : t('keyInPopup', '键 $1', [i + 1]);
     key.title = i < 3
-      ? '全局快捷键：Alt+Shift+' + (i + 1)
-      : '在此弹窗中按数字键 ' + (i + 1) + ' 切换；也可在 chrome://extensions/shortcuts 自行分配全局键';
+      ? t('keyGlobalTitle', '全局快捷键：Alt+Shift+$1', [i + 1])
+      : t('keyPopupTitle', '在此弹窗中按数字键 $1 切换', [i + 1]);
 
     btn.append(icon, name, key);
     btn.addEventListener('click', () => switchTo(pack.id, pack.name));
@@ -59,7 +68,7 @@ async function switchTo(id, name) {
   await chrome.storage.sync.set({ activePackId: id });
   chrome.runtime.sendMessage({ type: 'config-changed' }, () => {});
   render();
-  statusEl.textContent = '已切换到「' + name + '」';
+  statusEl.textContent = t('switched', '已切换到「$1」', [name]);
   setTimeout(() => { statusEl.textContent = ''; }, 2000);
 }
 
@@ -99,4 +108,5 @@ document.getElementById('shortcuts').addEventListener('click', () => {
   chrome.tabs.create({ url: 'chrome://extensions/shortcuts' });
 });
 
+applyStaticI18n();
 load();
