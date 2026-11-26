@@ -143,7 +143,7 @@ Select any text, right-click, search it on Google, and let the extension open th
 2. Open `chrome://extensions` in Chrome.
 3. Enable **Developer mode** (top right).
 4. Click **Load unpacked** and select the unzipped folder (the one containing `manifest.json`).
-5. Click the toolbar icon to see the 8 packs. The default pack follows your browser language.
+5. Click the toolbar icon to see the 9 packs. The default pack follows your browser language.
 
 ## How to use
 
