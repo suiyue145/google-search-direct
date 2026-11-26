@@ -76,6 +76,8 @@ async function switchTo(id, name) {
 }
 
 async function load() {
+  await I18N.init();
+  applyStaticI18n();
   let config = await getConfig();
   if (!config) {
     const s = await chrome.storage.sync.get(['packs', 'activePackId']);
@@ -101,6 +103,14 @@ document.addEventListener('keydown', (event) => {
     const current = packs.findIndex((p) => p.id === activeId);
     const next = packs[(current + 1) % packs.length];
     if (next) switchTo(next.id, next.name);
+  }
+});
+
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area !== 'sync') return;
+  if (changes.uiLangPref || changes.packs) {
+    I18N.setPref(changes.uiLangPref ? changes.uiLangPref.newValue : I18N.pref);
+    load();
   }
 });
 

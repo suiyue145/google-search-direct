@@ -1,6 +1,6 @@
 'use strict';
 
-importScripts('packs.js');
+importScripts('i18n-data.js', 'i18n.js', 'packs.js');
 
 const MENU_ID = 'google-search-open-default';
 const BUILTIN_IDS_SET = new Set(globalThis.BUILTIN_IDS || []);
@@ -48,6 +48,7 @@ function effectiveVariant(pref) {
 // 读取配置，并在首次运行时按系统语言（或用户指定的预设）初始化网站包；
 // 同时迁移旧版的单域名/单列表配置。
 async function ensureConfig() {
+  await I18N.init();
   const s = await chrome.storage.sync.get([
     'packs', 'activePackId', 'openMode', 'targetDomains', 'targetDomain', 'locale'
   ]);
@@ -84,7 +85,10 @@ async function ensureConfig() {
     const builtin = isBuiltinPack(p);
     return {
       id: String(p.id || ('pack-' + Math.random().toString(36).slice(2, 8))),
-      name: String(p.name || message(builtin ? nameKeyFor(p.id) : 'unnamedPack', '未命名')),
+      // 内置包名始终按当前界面语言重新生成，语言切换后自动跟随
+      name: builtin
+        ? message(nameKeyFor(p.id), String(p.name || ''))
+        : String(p.name || message('unnamedPack', '未命名')),
       icon: String(p.icon || '🔗'),
       domains: cleanDomains(p.domains),
       builtin
@@ -254,6 +258,17 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     applyLocale(msg.locale)
       .then((config) => sendResponse({ ok: true, config }))
       .catch((err) => sendResponse({ ok: false, error: String(err && err.message || err) }));
+    return true; // 异步响应
+  } else if (msg.type === 'set-lang') {
+    const pref = msg.lang === 'zh_CN' || msg.lang === 'en' ? msg.lang : 'auto';
+    (async () => {
+      await chrome.storage.sync.set({ uiLangPref: pref });
+      I18N.setPref(pref);
+      const config = await ensureConfig();
+      await applyUI(config);
+      broadcastConfigChanged();
+      sendResponse({ ok: true, lang: I18N.lang });
+    })().catch((err) => sendResponse({ ok: false, error: String(err && err.message || err) }));
     return true; // 异步响应
   }
 });

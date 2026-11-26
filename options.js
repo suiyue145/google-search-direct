@@ -5,6 +5,7 @@ const BUILTIN_IDS_SET = new Set(globalThis.BUILTIN_IDS || []);
 const packsEl = document.getElementById('packs');
 const modeSelect = document.getElementById('mode');
 const localeSelect = document.getElementById('locale');
+const uiLangSelect = document.getElementById('ui-lang');
 const statusEl = document.getElementById('status');
 const jsonEl = document.getElementById('config-json');
 
@@ -243,6 +244,38 @@ document.getElementById('reset-packs').addEventListener('click', () => {
   flash(t('resetDone', '已恢复内置预设，记得点「保存设置」'));
 });
 
+uiLangSelect.addEventListener('change', async () => {
+  const pref = uiLangSelect.value;
+  try {
+    await new Promise((resolve, reject) => {
+      chrome.runtime.sendMessage({ type: 'set-lang', lang: pref }, (resp) => {
+        if (chrome.runtime.lastError) {
+          reject(new Error(chrome.runtime.lastError.message));
+          return;
+        }
+        if (resp && resp.ok === false) {
+          reject(new Error(resp.error || 'set-lang failed'));
+          return;
+        }
+        resolve(resp);
+      });
+    });
+    await load();
+    flash(t('langSwitched', '界面语言已切换'));
+  } catch (e) {
+    flash(String(e && e.message ? e.message : e));
+  }
+});
+
+// 语言或网站包配置在其他页面（如弹窗）变化时，同步刷新本页
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area !== 'sync') return;
+  if (changes.uiLangPref || changes.packs) {
+    I18N.setPref(changes.uiLangPref ? changes.uiLangPref.newValue : I18N.pref);
+    load();
+  }
+});
+
 localeSelect.addEventListener('change', async () => {
   const pref = localeSelect.value;
   try {
@@ -364,6 +397,9 @@ async function save() {
 }
 
 async function load() {
+  await I18N.init();
+  applyStaticI18n();
+  uiLangSelect.value = I18N.pref;
   const s = await chrome.storage.sync.get(['packs', 'activePackId', 'openMode', 'locale']);
   packs = Array.isArray(s.packs) && s.packs.length ? clone(s.packs) : createBuiltinPacks();
   activeId = s.activePackId || (packs[0] && packs[0].id) || '';

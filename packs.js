@@ -251,13 +251,17 @@ const EN_REGION_TWEAKS = {
 const BUILTIN_IDS = ['general', 'novel', 'movie', 'shopping', 'academic', 'dev', 'news', 'music'];
 
 function uiLanguage() {
+  // 返回当前生效语言（受扩展内语言偏好控制），供页面 lang 属性与地区判断使用
+  if (globalThis.I18N && I18N.lang) return I18N.lang;
   try {
     if (globalThis.chrome && chrome.i18n && chrome.i18n.getUILanguage) return chrome.i18n.getUILanguage();
   } catch (e) { /* 忽略 */ }
-  return 'en-US';
+  return 'en';
 }
 
 function message(key, fallback, substitutions) {
+  // 优先用扩展内部语言层（支持跟随系统 / 手动切换），否则回退 Chrome i18n
+  if (globalThis.I18N && I18N.tr) return I18N.tr(key, fallback, substitutions);
   try {
     if (globalThis.chrome && chrome.i18n && chrome.i18n.getMessage) {
       const value = substitutions

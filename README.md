@@ -2,7 +2,7 @@
 
 选中任意文字 → 右键 → 自动 Google 搜索 → 按**当前网站包**的优先顺序打开结果链接。
 
-内置 8 套按爱好分类的网站包（通用、小说、影视、购物、学术、开发、新闻、音乐）。界面支持**简体中文 / English**，自动跟随 Chrome 系统语言；新安装的**默认网站列表**也按语言/国家自动选择（中文用户用国内常用站，英文用户用国际常用站，英/加/澳另有本地微调）。纯前端、无服务器、无追踪，Manifest V3。
+内置 8 套按爱好分类的网站包（通用、小说、影视、购物、学术、开发、新闻、音乐）。界面支持**简体中文 / English**，默认自动跟随系统语言，也可在设置页固定；新安装的**默认网站列表**按语言/国家自动选择（中文用户用国内常用站，英文用户用国际常用站，英/加/澳另有本地微调）。发布名称与描述采用中英混合。纯前端、无服务器、无追踪，Manifest V3。
 
 ## 安装（从 GitHub 源码）
 
@@ -36,7 +36,7 @@ git clone https://github.com/suiyue145/google-search-direct.git
 
 ## 语言与默认网站列表
 
-- **界面语言**：跟随 Chrome 界面语言（简体中文 / English；其他语言回退英文）。菜单、弹窗、设置页、右键菜单和快捷键说明都随之切换。
+- **界面语言**：默认「跟随系统语言（自动）」——读取浏览器界面语言（简体中文 / English，其他语言回退英文），也可在设置页固定为简体中文或 English。切换后右键菜单、工具栏提示、弹窗、设置页和内置包名都会立即更新；已打开的页面自动刷新。
 - **默认网站列表**：首次安装时按浏览器语言自动选择——
   - 中文（`zh-*`）→ 国内常用站点（知乎、起点、淘宝、知网等）
   - 英文（`en-*`）→ 国际常用站点（Wikipedia、Reddit、Goodreads、IMDb、Amazon、BBC 等）
@@ -105,6 +105,7 @@ Chrome 限制每个扩展最多只能预置 **4 个**默认快捷键，所以采
 - 用一次性 `ext_token` 识别右键触发的那次搜索，手动搜索不会误触发
 - 只发**只读搜索请求**，不登录、不下单、不收集选中文字以外的数据
 - 版本 1.0 的单域名、1.1 的自定义域名列表会自动迁移成「我的网站」包，不会丢失设置
+- 翻译文本在 `_locales/*.json` 维护，`i18n-data.js` 是生成文件；改完消息后需重新生成（见维护指南）
 
 ## 常见问题
 
@@ -115,7 +116,7 @@ Chrome 限制每个扩展最多只能预置 **4 个**默认快捷键，所以采
 - Google 调整了结果页 DOM 结构——改 `content.js` 里的 `findFirstMatch` 选择器即可
 
 **界面语言不对？**
-Chrome 扩展语言跟随浏览器界面语言：把 Chrome 界面切成中文或英文后重新打开扩展页面即可。其他语言会回退到英文。网站列表可在设置页单独指定，不依赖界面语言。
+打开设置页，在最上方「界面语言」选择「跟随系统语言（自动）」或固定为简体中文 / English。浏览器扩展无法直接读取操作系统语言，「跟随系统」实际读取浏览器界面语言；其他语言回退英文。网站列表可在下方单独指定，不依赖界面语言。
 
 **快捷键没反应？**
 Chrome 每个扩展最多只允许 4 个预置默认键，本插件已把 `Alt+Shift+1/2/3/0` 预置好；其余「切换到网站包 4~8」默认未绑定，需去 `chrome://extensions/shortcuts` 自行设置。若预置键被占用，在那里改键即可；最快捷的兜底是点图标后在弹窗里按数字键 1~8。
@@ -132,7 +133,7 @@ Chrome 每个扩展最多只允许 4 个预置默认键，本插件已把 `Alt+S
 
 Select any text, right-click, search it on Google, and let the extension open the first matching result from your **active site pack**.
 
-8 built-in packs (General, Books, Movies & TV, Shopping, Research, Development, News, Music & Audio). The interface supports **Simplified Chinese / English** and follows your Chrome UI language. New installs also get a locale-appropriate site list (Chinese sites for `zh-*`, international sites for `en-*`, with GB/CA/AU tweaks). No server, no tracking, Manifest V3.
+8 built-in packs (General, Books, Movies & TV, Shopping, Research, Development, News, Music & Audio). The interface supports **Simplified Chinese / English**, follows your system/browser language by default and can be pinned in options. New installs also get a locale-appropriate site list (Chinese sites for `zh-*`, international sites for `en-*`, with GB/CA/AU tweaks). Store listing uses a bilingual mixed-language title and description. No server, no tracking, Manifest V3.
 
 ## Install from source
 
@@ -153,7 +154,7 @@ Open mode: **new tab** (recommended, keeps Google results) or **navigate in the 
 
 ## Language and default site list
 
-- **UI language** follows Chrome: Simplified Chinese or English; other languages fall back to English.
+- **UI language** follows your system/browser language by default (Simplified Chinese or English; other languages fall back to English) and can be pinned from options. Menus, popup, options and built-in pack names update immediately.
 - **Default site list** on first install: `zh-*` → Chinese sites (Zhihu, Qidian, Taobao, CNKI...); `en-*` → international sites (Wikipedia, Reddit, Goodreads, IMDb, Amazon, BBC...). `en-GB`/`en-CA`/`en-AU` use local shopping and news sites (e.g. `amazon.co.uk`, `bbc.com`).
 - **Manual override**: in options, "Default site list" lets you choose Follow system language / Chinese sites / English sites. Built-in packs are replaced on switch; your custom packs are kept. Existing installations are never reset.
 
