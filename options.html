@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Google 搜索直达 - 设置</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --panel: #f7f8fa;
+    --text: #1f2329;
+    --muted: #646a73;
+    --line: #dee0e3;
+    --primary: #2563eb;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 32px 16px;
+    background: var(--bg);
+    color: var(--text);
+    font: 14px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  .wrap { max-width: 560px; margin: 0 auto; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 28px; }
+  label { display: block; font-weight: 600; margin: 20px 0 8px; }
+  input, select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--text);
+    font: inherit;
+  }
+  input:focus, select:focus { outline: 2px solid rgba(37, 99, 235, .25); border-color: var(--primary); }
+  .presets { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .presets button {
+    border: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--muted);
+    border-radius: 14px;
+    padding: 3px 10px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  .presets button:hover { border-color: var(--primary); color: var(--primary); }
+  #save {
+    margin-top: 24px;
+    width: 100%;
+    padding: 10px;
+    border: 0;
+    border-radius: 6px;
+    background: var(--primary);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  #save:hover { background: #1d4ed8; }
+  #status { min-height: 22px; margin: 10px 0 0; color: #16803c; }
+  .help {
+    margin-top: 28px;
+    padding: 14px 16px;
+    background: var(--panel);
+    border-radius: 6px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .help p { margin: 0 0 8px; }
+  .help p:last-child { margin-bottom: 0; }
+  code { background: #eceff3; padding: 1px 4px; border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Google 搜索直达</h1>
+  <p class="sub">选中文字 → 右键 → Google 搜索 → 自动打开指定网站的结果</p>
+
+  <label for="domain">默认网站域名</label>
+  <input id="domain" type="text" placeholder="例如 zhihu.com、github.com、wikipedia.org" autocomplete="off">
+  <div class="presets" id="presets"></div>
+
+  <label for="mode">打开方式</label>
+  <select id="mode">
+    <option value="newtab">新标签页打开（推荐，保留 Google 结果）</option>
+    <option value="navigate">在当前标签页跳转</option>
+  </select>
+
+  <button id="save">保存设置</button>
+  <p id="status"></p>
+
+  <div class="help">
+    <p><strong>使用说明</strong></p>
+    <p>1. 填写域名（不用写 <code>https://</code> 和 <code>www.</code>，写了也能识别）。</p>
+    <p>2. 在任意网页选中一段文字，右键选择「Google 搜索并自动打开默认网站」。</p>
+    <p>3. 插件会打开 Google 搜索，并在结果里找到第一个属于该网站的链接自动打开。</p>
+    <p>4. 如果这次搜索没有该网站的结果，就只保留 Google 页面，不会乱跳。</p>
+  </div>
+</div>
+<script src="options.js"></script>
+</body>
+</html>
