@@ -4,7 +4,15 @@
 
 内置 9 套按爱好分类的网站包（通用、小说、影视、购物、学术、开发、新闻、音乐、AI）。界面支持**简体中文 / English**，默认自动跟随系统语言，也可在设置页固定；新安装的**默认网站列表**按语言/国家自动选择（中文用户用国内常用站，英文用户用国际常用站，英/加/澳另有本地微调）。发布名称与描述采用中英混合。纯前端、无服务器、无追踪，Manifest V3。
 
-## 安装（从 GitHub 源码）
+## 安装
+
+### 方式一：一键安装助手（macOS，推荐）
+
+进入仓库 `installer/` 目录，双击 `一键安装-Mac.command`，选「1) 安装 / 重装」。脚本会自动下载 GitHub 最新版、放到固定目录、打开扩展页并复制目录路径；你只需在「加载已解压的扩展程序」弹窗里按 `Shift+Command+G` 粘贴路径并确认。详见 `installer/使用说明.md`。
+
+> Chrome 137+ 禁止第三方扩展静默安装（`--load-extension` 参数已移除），所以最后一步必须由用户在浏览器里亲自确认，这是浏览器限制，不是脚本缺陷。
+
+### 方式二：从 GitHub 源码手动安装
 
 1. 点右上角 Code → Download ZIP，下载后解压
 2. 打开 Chrome，地址栏输入 `chrome://extensions`
@@ -137,7 +145,15 @@ Select any text, right-click, search it on Google, and let the extension open th
 
 9 built-in packs (General, Books, Movies & TV, Shopping, Research, Development, News, Music & Audio, AI & Tools). The interface supports **Simplified Chinese / English**, follows your system/browser language by default and can be pinned in options. New installs also get a locale-appropriate site list (Chinese sites for `zh-*`, international sites for `en-*`, with GB/CA/AU tweaks). Store listing uses a bilingual mixed-language title and description. No server, no tracking, Manifest V3.
 
-## Install from source
+## Install
+
+### Option 1: one-click installer (macOS, recommended)
+
+Open the `installer/` folder and double-click `一键安装-Mac.command`, then choose "1) Install". It downloads the latest release from GitHub, places it in a stable folder, opens the extensions page and copies the folder path. You only need to paste the path in the "Load unpacked" dialog (`Shift+Command+G`, then `Command+V`). See `installer/使用说明.md`.
+
+> Chrome 137+ removed `--load-extension` and blocks silent third-party extension installs, so the final confirmation in the browser cannot be automated.
+
+### Option 2: install manually from source
 
 1. Download the ZIP from GitHub and unzip it.
 2. Open `chrome://extensions` in Chrome.
