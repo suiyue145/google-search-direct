@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Google 搜索直达 - 设置</title>
+<title>Google 搜索直达 - 网站包管理</title>
 <style>
   :root {
     --bg: #ffffff;
@@ -17,112 +17,75 @@
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    padding: 32px 16px;
+    padding: 28px 16px 60px;
     background: var(--bg);
     color: var(--text);
     font: 14px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
   }
-  .wrap { max-width: 600px; margin: 0 auto; }
+  .wrap { max-width: 780px; margin: 0 auto; }
   h1 { font-size: 22px; margin: 0 0 4px; }
-  .sub { color: var(--muted); margin: 0 0 28px; }
-  label { display: block; font-weight: 600; margin: 20px 0 8px; }
-  select {
-    width: 100%;
-    padding: 9px 12px;
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    background: #fff;
-    color: var(--text);
-    font: inherit;
-  }
-  select:focus { outline: 2px solid rgba(37, 99, 235, .25); border-color: var(--primary); }
+  .sub { color: var(--muted); margin: 0 0 24px; }
+  h2 { font-size: 16px; margin: 28px 0 10px; }
 
-  .domain-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
+  .pack {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 12px;
+    background: #fff;
   }
-  .domain-row .rank {
-    flex: 0 0 26px;
-    text-align: center;
-    color: var(--muted);
-    font-size: 13px;
-    font-variant-numeric: tabular-nums;
+  .pack.is-active { border-color: #9dbdfb; background: #f8fbff; }
+  .pack-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .pack-head input.icon {
+    width: 40px; height: 34px; text-align: center;
+    border: 1px solid var(--line); border-radius: 6px; font: inherit;
   }
+  .pack-head input.name {
+    flex: 1 1 auto; min-width: 0; padding: 7px 10px;
+    border: 1px solid var(--line); border-radius: 6px; font: inherit;
+  }
+  .key-hint {
+    flex: 0 0 auto; color: var(--muted); font-size: 11px;
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 4px; padding: 2px 6px;
+  }
+  .btn {
+    flex: 0 0 auto; padding: 6px 10px; border: 1px solid var(--line);
+    border-radius: 6px; background: #fff; color: var(--text);
+    font: inherit; cursor: pointer;
+  }
+  .btn:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); }
+  .btn:disabled { opacity: .45; cursor: default; }
+  .btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .btn.primary:hover { background: #1d4ed8; color: #fff; }
+  .btn.danger:hover { border-color: var(--danger); color: var(--danger); }
+  .btn.small { padding: 4px 9px; font-size: 12px; }
+
+  .domain-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .domain-row .rank { flex: 0 0 24px; text-align: center; color: var(--muted); font-size: 12px; }
   .domain-row input {
-    flex: 1 1 auto;
-    min-width: 0;
-    padding: 9px 12px;
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    background: #fff;
-    color: var(--text);
-    font: inherit;
+    flex: 1 1 auto; min-width: 0; padding: 7px 10px;
+    border: 1px solid var(--line); border-radius: 6px; font: inherit;
   }
-  .domain-row input:focus { outline: 2px solid rgba(37, 99, 235, .25); border-color: var(--primary); }
-  .domain-row button {
-    flex: 0 0 auto;
-    width: 30px;
-    height: 30px;
-    border: 1px solid var(--line);
-    background: var(--panel);
-    color: var(--muted);
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    line-height: 1;
-    padding: 0;
-  }
-  .domain-row button:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); }
-  .domain-row button:disabled { opacity: .35; cursor: default; }
-  .domain-row button.del:hover { border-color: var(--danger); color: var(--danger); }
+  .domain-row .btn.small { width: 28px; padding: 4px 0; text-align: center; }
+  .empty { color: var(--muted); font-size: 13px; margin: 4px 0 8px; }
 
-  .ghost-btn {
-    margin-top: 4px;
-    padding: 7px 12px;
-    border: 1px dashed var(--line);
-    background: #fff;
-    color: var(--primary);
-    border-radius: 6px;
-    cursor: pointer;
-    font: inherit;
+  select, textarea {
+    width: 100%; padding: 9px 12px; border: 1px solid var(--line);
+    border-radius: 6px; background: #fff; color: var(--text); font: inherit;
   }
-  .ghost-btn:hover { border-color: var(--primary); }
-
-  .presets { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
-  .presets button {
-    border: 1px solid var(--line);
-    background: var(--panel);
-    color: var(--muted);
-    border-radius: 14px;
-    padding: 3px 10px;
-    cursor: pointer;
-    font-size: 12px;
-  }
-  .presets button:hover { border-color: var(--primary); color: var(--primary); }
-
+  textarea { min-height: 130px; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; }
+  .row { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
   #save {
-    margin-top: 24px;
-    width: 100%;
-    padding: 10px;
-    border: 0;
-    border-radius: 6px;
-    background: var(--primary);
-    color: #fff;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
+    margin-top: 24px; width: 100%; padding: 11px; border: 0; border-radius: 6px;
+    background: var(--primary); color: #fff; font-size: 15px; font-weight: 600; cursor: pointer;
   }
   #save:hover { background: #1d4ed8; }
   #status { min-height: 22px; margin: 10px 0 0; color: #16803c; }
   .help {
-    margin-top: 28px;
-    padding: 14px 16px;
-    background: var(--panel);
-    border-radius: 6px;
-    color: var(--muted);
-    font-size: 13px;
+    margin-top: 28px; padding: 14px 16px; background: var(--panel);
+    border-radius: 6px; color: var(--muted); font-size: 13px;
   }
   .help p { margin: 0 0 8px; }
   .help p:last-child { margin-bottom: 0; }
@@ -131,32 +94,44 @@
 </head>
 <body>
 <div class="wrap">
-  <h1>Google 搜索直达</h1>
-  <p class="sub">选中文字 → 右键 → Google 搜索 → 按优先顺序自动打开网站结果</p>
+  <h1>Google 搜索直达 · 网站包管理</h1>
+  <p class="sub">为不同爱好配置不同的网站优先列表，点工具栏图标或按快捷键秒切</p>
 
-  <label>默认网站（按优先顺序）</label>
-  <div id="domain-list"></div>
-  <button type="button" class="ghost-btn" id="add-domain">+ 添加网站</button>
-  <div class="presets" id="presets"></div>
+  <h2>网站包</h2>
+  <div id="packs"></div>
+  <div class="actions">
+    <button type="button" class="btn" id="add-pack">+ 新建网站包</button>
+    <button type="button" class="btn" id="reset-packs">恢复内置预设</button>
+    <button type="button" class="btn" id="open-shortcuts">设置快捷键</button>
+  </div>
 
-  <label for="mode">打开方式</label>
+  <h2>打开方式</h2>
   <select id="mode">
     <option value="newtab">新标签页打开（推荐，保留 Google 结果）</option>
     <option value="navigate">在当前标签页跳转</option>
   </select>
+
+  <h2>导入 / 导出配置（可发给别人共用）</h2>
+  <textarea id="config-json" spellcheck="false" placeholder="点击「导出」生成配置，或粘贴别人的配置后点「导入」"></textarea>
+  <div class="row">
+    <button type="button" class="btn" id="export">导出到文本框</button>
+    <button type="button" class="btn" id="copy">复制配置</button>
+    <button type="button" class="btn" id="import">导入文本框配置</button>
+  </div>
 
   <button id="save">保存设置</button>
   <p id="status"></p>
 
   <div class="help">
     <p><strong>使用说明</strong></p>
-    <p>1. 按优先顺序填写域名，用 ↑ ↓ 调整顺序——排在前面的网站会优先被打开。</p>
-    <p>2. 域名不用写 <code>https://</code> 和 <code>www.</code>，写了也能识别。</p>
-    <p>3. 选中文字后右键 →「Google 搜索并自动打开默认网站」。</p>
-    <p>4. 插件会检查 Google 结果：第一个网站有结果就打开它；没有就依次试第二个、第三个……全部没有则保留 Google 页面。</p>
-    <p>5. 同一网站取搜索结果里排名最靠前的那条链接。</p>
+    <p>1. 每个包是一个按优先顺序排列的域名列表：排在前面的网站有结果就打开它，没有才试下一个。</p>
+    <p>2. 点卡片上的「启用」决定当前生效的包；点工具栏图标可快速切换，或用 <code>Alt+Shift+1~8</code> 直接切到第 1~8 个包，<code>Alt+Shift+0</code> 循环切换。</p>
+    <p>3. 快捷键如被系统占用，打开「设置快捷键」自行改键。</p>
+    <p>4. 域名不用写 <code>https://</code> 和 <code>www.</code>，写了也能识别；只收录合法站点，请勿添加盗版资源站。</p>
+    <p>5. 选中文字后右键 →「Google 搜索并打开「包名」结果」即可使用。</p>
   </div>
 </div>
+<script src="packs.js"></script>
 <script src="options.js"></script>
 </body>
 </html>
